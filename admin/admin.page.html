@@ -1,0 +1,51 @@
+<ion-header *ngIf="!printing">
+  <ion-toolbar>
+    <ion-title>Admin</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="3" *ngIf="!printing">
+        <ion-item>
+          <ion-label position="floating">Error Correction Level</ion-label>
+          <ion-select [(ngModel)]="errorCorrectionLevel">
+            <ion-select-option [value]="NgxQrcodeErrorCorrectionLevels.HIGH">HIGH</ion-select-option>
+            <ion-select-option [value]="NgxQrcodeErrorCorrectionLevels.MEDIUM">MEDIUM</ion-select-option>
+            <ion-select-option [value]="NgxQrcodeErrorCorrectionLevels.LOW">LOW</ion-select-option>
+            <ion-select-option [value]="NgxQrcodeErrorCorrectionLevels.QUARTILE">QUARTILE</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">QR Code Text</ion-label>
+          <ion-textarea
+            [(ngModel)]="text"
+            [autoGrow]="true"
+            type="text"
+            placeholder="Enter each new QR Code on a blank line"></ion-textarea>
+        </ion-item>
+        <ion-button (click)="onClick_CreateQRCodes()">Create QR Codes</ion-button>
+        <ion-button (click)="onClick_Print()">Print</ion-button>
+      </ion-col>
+      <ion-col [size]="printing ? '12' : '9'">
+        <ion-grid #qrGrid class="section-to-print">
+          <ion-row>
+            <ion-col [size]="printing ? '2' : '3'" *ngFor="let qrText of codes" class="ion-text-center" >
+              <ngx-qrcode
+                #qrCode
+                (click)="qrCode_onClick(qrCode, qrText)"
+                [elementType]="NgxQrcodeElementTypes.URL"
+                [value]="qrText"
+                [errorCorrectionLevel]="errorCorrectionLevel"
+                [width]="250"
+                [margin]="0"
+              ></ngx-qrcode>
+              <h5>{{ qrText }}</h5>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
